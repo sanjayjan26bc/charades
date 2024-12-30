@@ -129,7 +129,7 @@ with tabs[1]:
     st.markdown("""
     <style>
         .time-remaining {
-            font-size: 40px;
+            font-size: 20px;
             color: #FF6347;
             font-weight: bold;
             text-align: center;
