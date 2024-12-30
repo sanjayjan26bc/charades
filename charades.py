@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 import time
-import pandas as pd
+import csv
 
 # Streamlit App Title with emojis and colorful, smaller font
 st.markdown("""
@@ -11,16 +11,19 @@ st.markdown("""
 # Load the movie list from the CSV file
 def load_movies_from_csv(csv_file):
     try:
-        # Read the CSV file using pandas
-        df = pd.read_csv(csv_file)
+        # Open and read the CSV file using Python's built-in csv module
+        with open(csv_file, mode='r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            movie_list = [row[0] for row in reader if row]  # Assuming the movie name is in the first column
+            
+        # Remove any leading/trailing whitespaces from the movie names
+        movie_list = [movie.strip() for movie in movie_list if movie.strip()]
         
-        # Ensure we only have the 'MovieName' column, and remove any rows with NaN values
-        if 'MovieName' not in df.columns:
-            st.error("CSV file must have a 'MovieName' column.")
+        # Check if the movie list is empty
+        if not movie_list:
+            st.error("No movies found in the CSV file.")
             return []
         
-        # Get the movie names as a list
-        movie_list = df['MovieName'].dropna().tolist()
         return movie_list
     except Exception as e:
         st.error(f"Error loading CSV file: {e}")
