@@ -27,7 +27,7 @@ def start_timer(duration, time_remaining_placeholder):
     st.session_state.time_left = duration  # Initialize time in session state
     time_remaining_placeholder.text("Time Remaining: 00:00")  # Initialize with 00:00
 
-    while st.session_state.time_left > 10:
+    while st.session_state.time_left > 59:
         minutes, seconds = divmod(st.session_state.time_left, 60)
         st.session_state.time_left -= 1
         st.session_state.timer_running = True
@@ -38,9 +38,9 @@ def start_timer(duration, time_remaining_placeholder):
 
         time.sleep(1)  # Decrease time every second
 
-    # Flashing countdown for the last 10 seconds
+    # Flashing countdown for the last 59 seconds
     flashing_placeholder = st.empty()  # Placeholder for flashing numbers
-    for i in range(10, 0, -1):
+    for i in range(59, 0, -1):
         flashing_placeholder.markdown(f"<h1 style='color: red; font-size: 70px; text-align: center;'>" + str(i) + "</h1>", unsafe_allow_html=True)
         time.sleep(0.8)  # Flash every 0.8 second
 
@@ -51,7 +51,10 @@ def start_timer(duration, time_remaining_placeholder):
     st.session_state.timer_running = False
     st.session_state.time_display = "00:00"
     
-    # Play a random audio file when the time is up
+    st.success("⏰ Time's up! 🎉")
+    time_remaining_placeholder.text("Time Remaining: 00:00")  # Reset the placeholder text
+
+    # Play a random audio file after the timer ends
     audio_folder = "audio"  # Path to the audio folder
     
     # Ensure the audio folder exists and contains audio files
@@ -67,9 +70,6 @@ def start_timer(duration, time_remaining_placeholder):
         st.audio(audio_path, format="audio/wav", autoplay=True)  # You can adjust the format depending on your file type
     else:
         st.warning("No audio files found in the 'audio' folder.")
-    
-    st.success("⏰ Time's up! 🎉")
-    time_remaining_placeholder.text("Time Remaining: 00:00")  # Reset the placeholder text
 
     # Show balloon animation after a short delay
     time.sleep(2)  # Adjust this as necessary to allow audio to play for a bit
